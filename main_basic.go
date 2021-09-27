@@ -1,9 +1,10 @@
 package main
 
 import (
-	auth "github.com/abbot/go-http-auth"
 	"fmt"
+	auth "github.com/abbot/go-http-auth"
 	"net/http"
+	"os"
 )
 
 func Secret(user, realm string) string {
@@ -21,5 +22,10 @@ func handle(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 func main() {
 	authenticator := auth.NewBasicAuthenticator("example.com", Secret)
 	http.HandleFunc("/hello", authenticator.Wrap(handle))
-	http.ListenAndServe(":8080", nil)
+	port := "8080"
+	if len(os.Args) > 1 {
+		port = os.Args[1]
+	}
+	fmt.Println("port is : " + port)
+	http.ListenAndServe(":"+port, nil)
 }

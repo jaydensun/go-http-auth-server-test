@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	auth "github.com/abbot/go-http-auth"
 )
@@ -22,5 +23,10 @@ func handleDigest(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 func main() {
 	authenticator := auth.NewDigestAuthenticator("example.com", secret)
 	http.HandleFunc("/hellodigest", authenticator.Wrap(handleDigest))
-	http.ListenAndServe(":8080", nil)
+	port := "8080"
+	if len(os.Args) > 1 {
+		port = os.Args[1]
+	}
+	fmt.Println("port is : " + port)
+	http.ListenAndServe(":"+port, nil)
 }
