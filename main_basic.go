@@ -5,6 +5,7 @@ import (
 	auth "github.com/abbot/go-http-auth"
 	"net/http"
 	"os"
+	"time"
 )
 
 func Secret(user, realm string) string {
@@ -16,7 +17,8 @@ func Secret(user, realm string) string {
 }
 
 func handle(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	fmt.Fprintf(w, "<html><body><h1>Hello, %s!</h1></body></html>", r.Username)
+	fmt.Println("current time : " + time.Now().String())
+	fmt.Fprintf(w, "{\"user\":\"%s\"}", r.Username)
 }
 
 func main() {
